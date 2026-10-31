@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 reassessed: two causes behind the merged date reports'
 owner: wojttex
-status: reviewed
+status: resolved
 reviewed: '2026-10-31'
 signature: 'wojttex / Codex / S01E03 / 2026-10-31'
 ---
@@ -46,7 +46,23 @@ App and email reports from those same tenants still belong to the parser cause.
 
 Track the causes separately: [shared parser — 379 reports](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/1)
 and [booking-v3 hint mismatch — 33 reports](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/2).
-No fix is claimed to be shipped or verified.
+The engineering dispositions below come from the course update; no independent production-patch verification is claimed.
+
+## Engineering dispositions: 5 October 2026
+
+The [engineering update](https://hq.mega.dev/challenges/what-it-shows#engineering-update)
+reports that #4471 closed on 5 October:
+
+- **Parser: fixed.** Engineering reports `fix(dates): parse dd/mm for eu locales`.
+  [GitHub issue #1](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/1)
+  is closed as completed.
+- **Hint: won’t fix.** The booking-v3 form was retired.
+  [GitHub issue #2](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/2)
+  is closed as not planned. Retirement is not a fix to the hint.
+
+The export ends on 4 October, so the computed table and timeline retain their historical
+counts. The subsequent engineering update supplies the dispositions; it does not change
+which reports were in the export or establish the cause of the ambiguous descriptions.
 
 ## Keep the one-day-move evidence visible
 
