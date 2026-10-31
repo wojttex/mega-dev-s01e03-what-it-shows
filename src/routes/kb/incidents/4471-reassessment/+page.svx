@@ -1,0 +1,90 @@
+---
+layout: runbook
+title: '#4471 reassessed: two causes behind the merged date reports'
+owner: wojttex
+status: reviewed
+reviewed: '2026-10-31'
+signature: 'wojttex / Codex / S01E03 / 2026-10-31'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The original [incident page](/kb/incidents/4471) says one cause and one queued fix.
+Its computed evidence shows two causes. The table below reflects the export before the new GitHub issues were opened; its historical “no ticket” label refers to that snapshot. Treat the incident's prose as superseded by
+this reassessment, while retaining the historical record.
+
+## Scope and counts
+
+This page uses the knowledge-base export dated 4 October 2026, not the current live queue.
+The report export repeats IDs where its pages overlap. Count each report ID once, then
+filter to the merged ticket; matching subjects do not identify duplicates.
+
+The published dataset is a privacy-reduced projection: report bodies, subjects and browser locales
+are omitted, and tenant handles are replaced consistently by aliases. The full original export
+is retained locally. This preserves report IDs, counting, cause grouping and timeline inputs.
+The table below computes the cause from tenant locale, form version and channel using
+`causes.ts`. Intake's browser-based tag is a guess, not the grouping rule.
+
+<CauseTable ticket={4471} />
+
+## Two independent fixes to investigate
+
+**Shared parser.** It reads dates month first while these tenants write day first.
+For example, R-41200 describes a reminder for 7 April being sent on 4 July.
+Respect the tenant's intended date order on the parser path.
+
+**Booking form hint.** booking-v3 displays `MM/DD/YYYY`, but interprets dates using the
+tenant's day-first locale. People following that hint get the wrong day and month.
+This affects form reports from tenant-01, tenant-02 and tenant-09. Align the
+hint with the form's interpretation; a shared-parser fix alone does not resolve this mismatch.
+App and email reports from those same tenants still belong to the parser cause.
+
+Track the causes separately: [shared parser — 379 reports](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/1)
+and [booking-v3 hint mismatch — 33 reports](https://github.com/wojttex/mega-dev-s01e03-what-it-shows/issues/2).
+No fix is claimed to be shipped or verified.
+
+## Keep the one-day-move evidence visible
+
+The desk notes mark R-41202, R-41209, R-41236, R-41344 and R-41620 as read as a one-day move.
+The exported classifier files them under parser by tenant and channel, and the table's
+footnote counts them there. They are already included, never five extra reports.
+Their descriptions do not establish a day/month swap in every case. In particular,
+the Lisbon/Toronto difference in R-41344 merits a timezone investigation. Keep these reports
+for follow-up; neither suppress their wording nor call a third defect confirmed from this export.
+
+## Received is different from merged
+
+Reports arrived from April onward. The July merge spike combines an older backlog; it does
+not mean those reports first arrived in July. The paired chart separates received time from
+merge time. Reports continued through the export date; this export says nothing about the
+queue after that date.
+
+<QueueTimeline ticket={4471} />
+
+## Replace subject-only triage
+
+The [triage page](/kb/triage/dedupe) points to
+[accepted decision 0001](/kb/decisions/0001-dedupe-by-subject), last reviewed in June 2024.
+That guidance is stale under the knowledge base's review rule. Preserve accepted decision
+0001 as history; a new accepted decision must replace it rather than silently editing it.
+
+Use the same cause, not a normalized subject, to decide whether reports belong together:
+
+- App versus email for the same day-first tenant can be the same parser issue.
+- The same subject for one booking-v3 tenant can be two issues: form hint versus app parser.
+- The same subject and form channel can differ by tenant form version.
+- Different subjects can still describe the same booking-v3 hint mismatch.
+- An unknown tenant cannot be assigned a cause safely; investigate before merging.
+
+<DedupeExplorer />
+
+This page proposes the replacement guidance and keeps the prior decision visible.
+It does not establish that the desk has adopted it. Re-check the live queue and tenant/form
+configuration when new evidence arrives, and update counts from report IDs and computed causes.
+
+<RenderStamp {signature} />

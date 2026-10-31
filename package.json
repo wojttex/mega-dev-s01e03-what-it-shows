@@ -1,0 +1,1 @@
+{"name":"mega-dev-s01e03-what-it-shows","private":true,"type":"module","scripts":{"render":"node render.mjs"},"devDependencies":{"svelte":"5.43.8","mdsvex":"0.12.6","vite":"6.4.1","@sveltejs/vite-plugin-svelte":"5.1.1"}}
